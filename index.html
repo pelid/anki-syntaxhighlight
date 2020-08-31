@@ -7,10 +7,11 @@
 <body>
   <div style="display: flex;">
     <textarea id="pycode" rows="10" cols="80" oninput="renderCode()" placeholder="Введите код Python" style="margin: 8px 30px 8px 10px;"></textarea>
-    <pre class="language-python" style="flex-grow:1;"><code id="highlighted-code"></code></pre>
+    <div style="flex-grow:1;">
+      <pre class="language-python"><code id="highlighted-code"></code></pre>
+      <textarea readonly id="code-html-tags" style="width: calc(100% - 20px); padding: 10px; resize: none; height: 100%;"></textarea>
+    </div>
   </div>
-
-
 
   <script src="./prism.js" data-manual></script>
 
@@ -20,8 +21,11 @@
       // TODO add languages selector ?
       const html = Prism.highlight(textarea.value, Prism.languages.python, 'python');
       document.getElementById('highlighted-code').innerHTML = html || '# Place for code';
+
+      const outputTextarea = document.getElementById('code-html-tags');
+      outputTextarea.value = html && `<pre class="language-python"><code>${html}</code></pre>` || '# Place for html tags';
     }
-    renderCode()
+    renderCode();
   </script>
 
 </body>
