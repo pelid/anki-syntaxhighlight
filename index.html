@@ -5,10 +5,14 @@
   <link rel="stylesheet" href="./friendly-theme.css">
 </head>
 <body>
+  <select id="highlight-switcher" onchange="renderCode()" style="margin: 10px; padding: 4px; font-size: 150%;">
+    <option value="python" default>Python</option>
+    <option value="console">Консоль</option>
+  </select>
   <div style="display: flex;">
-    <textarea id="pycode" rows="10" cols="80" oninput="renderCode()" placeholder="Введите код Python" style="margin: 8px 30px 8px 10px;"></textarea>
+    <textarea id="pycode" rows="10" cols="80" oninput="renderCode()" placeholder="Введите код" style="margin: 8px 30px 8px 10px; padding: 10px;"></textarea>
     <div style="flex-grow:1;">
-      <pre class="language-python"><code id="highlighted-code"></code></pre>
+      <pre><code id="highlighted-code"></code></pre>
       <textarea readonly id="code-html-tags" style="width: calc(100% - 20px); padding: 10px; resize: none; height: 100%;"></textarea>
     </div>
   </div>
@@ -16,14 +20,26 @@
   <script src="./prism.js" data-manual></script>
 
   <script type="text/javascript">
+    const choices = {
+      'python': ['language-python', text => Prism.highlight(text, Prism.languages.python, 'python')],
+      'console': ['console-output', text => text],
+    }
+
+
     function renderCode(){
+      const switcher = document.getElementById('highlight-switcher');
+
+      const lang = switcher.options[switcher.selectedIndex].value;
+      const [_class, render] = choices[lang];
+
       const textarea = document.getElementById('pycode');
-      // TODO add languages selector ?
-      const html = Prism.highlight(textarea.value, Prism.languages.python, 'python');
-      document.getElementById('highlighted-code').innerHTML = html || '# Place for code';
+      const html = render(textarea.value);
+      const codeEl = document.getElementById('highlighted-code')
+      codeEl.parentNode.className = _class;
+      codeEl.innerHTML = html || '# Place for code';
 
       const outputTextarea = document.getElementById('code-html-tags');
-      outputTextarea.value = html && `<pre class="language-python"><code>${html}</code></pre>` || '# Place for html tags';
+      outputTextarea.value = html && `<pre class="${_class}"><code>${html}</code></pre>` || '# Place for html tags';
     }
     renderCode();
   </script>
