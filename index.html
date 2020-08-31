@@ -8,6 +8,7 @@
   <select id="highlight-switcher" onchange="renderCode()" style="margin: 10px; padding: 4px; font-size: 150%;">
     <option value="python" default>Python</option>
     <option value="console">Консоль</option>
+    <option value="http">HTTP</option>
   </select>
   <div style="display: flex;">
     <textarea id="pycode" rows="10" cols="80" oninput="renderCode()" placeholder="Введите код" style="margin: 8px 30px 8px 10px; padding: 10px;"></textarea>
@@ -23,6 +24,7 @@
     const choices = {
       'python': ['language-python', text => Prism.highlight(text, Prism.languages.python, 'python')],
       'console': ['console-output', text => text],
+      'http': ['language-http', text => Prism.highlight(text, Prism.languages.http, 'http')],
     }
 
 
